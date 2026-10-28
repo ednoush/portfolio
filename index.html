@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Console Edna Sephora OULÉ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout : une console de supervision (SOC) traversée par un pipeline CI/CD. Bandeau d'état, flux d'événements vivant, pipeline animé, boucle DevSecOps, puis projets, laboratoire, compétences, certifications et parcours. */
+:root {
+  --ink: #0E0F11;
+  --panel: #16181C;
+  --panel-2: #1C1F24;
+  --line: #2A2E35;
+  --fg: #E8E6E3;
+  --muted: #A3A3AA;
+  --amber: #FF7A1A;
+  --amber-soft: rgba(255,122,26,0.13);
+  --signal: #6CB6FF;
+  --signal-soft: rgba(108,182,255,0.12);
+  --ok: #4FD18B;
+  --high: #FF6B6B;
+  --display: 'Chakra Petch', 'Arial Narrow', sans-serif;
+  --body: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body {
+  background: var(--ink);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  background-image:
+    radial-gradient(900px 600px at 85% -10%, rgba(255,122,26,0.10), transparent 60%),
+    radial-gradient(800px 600px at -10% 70%, rgba(108,182,255,0.08), transparent 60%),
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-attachment: fixed;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--ink); }
+a { color: var(--amber); }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--mono); }
+
+/* Fond technique */
+#net { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.scan { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 3px); }
+.scan::after { content: ""; position: absolute; left: 0; right: 0; height: 180px; top: -180px; background: linear-gradient(180deg, transparent, rgba(108,182,255,0.06) 70%, rgba(108,182,255,0.18) 100%); animation: sweep 9s linear infinite; }
+@keyframes sweep { to { transform: translateY(calc(100vh + 180px)); } }
+.statusbar, main, footer { position: relative; z-index: 1; }
+.corner { position: fixed; z-index: 0; pointer-events: none; font-family: var(--mono); font-size: 11px; color: rgba(163,163,170,0.45); letter-spacing: 0.1em; line-height: 1.7; }
+.corner.bl { left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+.corner.br { right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); text-align: right; }
+
+/* Bandeau d'état */
+.statusbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(14,15,17,0.94); border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); }
+.statusbar .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; padding-block: 10px; }
+.brand { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: 0.06em; color: var(--fg); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.brand b { color: var(--amber); }
+.live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--ok); letter-spacing: 0.08em; text-transform: uppercase; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); animation: ping 2s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(79,209,139,0.6); } 70% { box-shadow: 0 0 0 8px rgba(79,209,139,0); } 100% { box-shadow: 0 0 0 0 rgba(79,209,139,0); } }
+.nav { display: flex; flex-wrap: wrap; gap: 2px; }
+.nav a { font-family: var(--mono); font-size: 13px; color: var(--muted); text-decoration: none; padding: 10px 9px; border-radius: 4px; }
+.nav a:hover { color: var(--fg); background: var(--panel-2); }
+
+/* Hero */
+.hero { padding-block: 72px 56px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.eyebrow { font-family: var(--mono); font-size: 12px; color: var(--signal); letter-spacing: 0.14em; text-transform: uppercase; }
+.name { font-family: var(--display); font-weight: 700; font-size: clamp(46px, 7vw, 92px); line-height: 0.92; letter-spacing: -0.01em; margin: 18px 0 0; text-transform: uppercase; text-wrap: balance; }
+.name span { display: block; color: var(--amber); }
+.role { margin: 22px 0 0; font-size: 19px; color: var(--fg); max-width: 36ch; }
+.role em { font-style: normal; color: var(--amber); }
+.lead { margin: 14px 0 0; color: var(--muted); max-width: 56ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.chip { font-family: var(--mono); font-size: 12px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); background: var(--panel); }
+.chip b { color: var(--fg); font-weight: 500; }
+.chip.hot { border-color: var(--amber); background: var(--amber-soft); }
+.chip.hot b { color: var(--amber); }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn { font-family: var(--mono); font-size: 14px; font-weight: 600; letter-spacing: 0.04em; padding: 14px 22px; border-radius: 4px; text-decoration: none; border: 1px solid var(--amber); display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+.btn-main { background: var(--amber); color: var(--ink); }
+.btn-main:hover { background: #FF9A4D; }
+.btn-ghost { background: transparent; color: var(--amber); }
+.btn-ghost:hover { background: var(--amber-soft); }
+
+/* Flux d'événements */
+.feed { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; min-width: 0; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--panel-2); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.panel-head strong { color: var(--fg); font-weight: 600; letter-spacing: 0.06em; }
+.feed-body { height: 360px; overflow: hidden; padding: 8px 0; font-family: var(--mono); font-size: 12.5px; display: flex; flex-direction: column; justify-content: flex-end; }
+.ev { display: grid; grid-template-columns: 64px 46px minmax(0, 1fr); gap: 10px; padding: 7px 16px; border-left: 3px solid transparent; align-items: baseline; }
+.ev.new { animation: slide 0.5s ease-out; background: var(--amber-soft); border-left-color: var(--amber); }
+@keyframes slide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.ev time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.lvl { font-weight: 600; text-align: center; border-radius: 3px; font-size: 11px; padding: 1px 0; }
+.lvl.l3 { color: var(--signal); background: var(--signal-soft); }
+.lvl.l7 { color: var(--amber); background: var(--amber-soft); }
+.lvl.l10 { color: var(--high); background: rgba(255,107,107,0.12); }
+.ev span:last-child { color: var(--fg); overflow-wrap: anywhere; }
+.feed-foot { border-top: 1px solid var(--line); padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.feed-foot b { color: var(--fg); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Sections */
+section { padding-block: 64px; border-top: 1px solid var(--line); }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 32px; }
+.sec-head h2 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 4vw, 44px); line-height: 1.05; margin: 8px 0 0; text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; }
+.sec-head p { margin: 0; color: var(--muted); max-width: 50ch; font-size: 15px; }
+.group-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; display: flex; align-items: center; gap: 12px; }
+.group-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.group-label b { font-weight: 600; color: var(--ok); }
+.group-label b.learn { color: var(--signal); }
+.group + .group { margin-top: 40px; }
+
+/* Pipeline CI/CD */
+.pipeline { background: rgba(22,24,28,0.9); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.pipe-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 12px 16px; background: var(--panel-2); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.pipe-head b { color: var(--fg); font-weight: 500; }
+.pipe-head .sha { color: var(--signal); }
+.badge { font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 99px; }
+.badge.running { color: var(--signal); background: var(--signal-soft); }
+.badge.passed { color: var(--ok); background: rgba(79,209,139,0.14); }
+.pipe-scroll { overflow-x: auto; }
+.stages { display: flex; align-items: flex-start; min-width: 960px; padding: 22px 12px 18px; }
+.stage { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; text-align: center; padding-inline: 4px; }
+.stage::before, .stage::after { content: ""; position: absolute; top: 17px; right: 50%; height: 2px; z-index: 0; }
+.stage::before { width: 100%; background: var(--line); }
+.stage::after { width: 0; background: var(--ok); transition: width 0.5s ease; }
+.stage:first-child::before, .stage:first-child::after { display: none; }
+.stage.passed::after, .stage.running::after { width: 100%; }
+.stage.running::after { background: var(--signal); }
+.dot { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--line); background: var(--ink); display: grid; place-items: center; position: relative; z-index: 1; color: var(--muted); transition: border-color 0.3s, color 0.3s; }
+.dot svg { width: 16px; height: 16px; }
+.stage.running .dot { border-color: var(--signal); color: var(--signal); }
+.stage.running .dot::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--signal); animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.stage.passed .dot { border-color: var(--ok); color: var(--ok); }
+.stage-kind { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.stage.sec .stage-kind { color: var(--amber); }
+.stage-name { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--fg); line-height: 1.2; }
+.stage-time { font-family: var(--mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1.6em; }
+.pipe-note { margin: 20px 0 0; color: var(--muted); font-size: 15px; max-width: 80ch; }
+.pipe-note b { color: var(--fg); font-weight: 500; }
+
+/* Boucle DevSecOps */
+.loop-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: center; }
+.loop-fig { margin: 0; background: rgba(22,24,28,0.7); border: 1px solid var(--line); border-radius: 8px; padding: 12px; overflow-x: auto; }
+.loop-fig svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.loop-fig .track { fill: none; stroke: var(--line); stroke-width: 18; stroke-linejoin: round; }
+.loop-fig .dev { fill: none; stroke: var(--signal); stroke-width: 3; stroke-dasharray: 6 10; animation: flow 1.6s linear infinite; }
+.loop-fig .ops { fill: none; stroke: var(--amber); stroke-width: 3; stroke-dasharray: 6 10; animation: flow 1.6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -32; } }
+.loop-fig .ph { fill: var(--ink); stroke-width: 2; }
+.loop-fig .ph.d { stroke: var(--signal); }
+.loop-fig .ph.o { stroke: var(--amber); }
+.loop-fig .lbl { font-family: var(--mono); font-size: 14px; fill: var(--fg); }
+.loop-fig .side { font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: 0.12em; }
+.loop-fig .side.d { fill: var(--signal); }
+.loop-fig .side.o { fill: var(--amber); }
+.loop-fig .shield { fill: var(--panel-2); stroke: var(--ok); stroke-width: 2; }
+.loop-fig .sec { font-family: var(--mono); font-size: 13px; font-weight: 600; fill: var(--ok); letter-spacing: 0.1em; }
+.loop-fig .runner { fill: var(--fg); }
+.phases { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.phases li { background: rgba(22,24,28,0.88); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+.phases b { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.phases li.d b { color: var(--signal); }
+.phases li.o b { color: var(--amber); }
+.phases span { color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+
+/* Dossiers (projets) */
+.cases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.case { background: rgba(22,24,28,0.92); border: 1px solid var(--line); border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+.case:hover { border-color: var(--amber); }
+.case::after { content: attr(data-state); position: absolute; top: 18px; right: -36px; transform: rotate(35deg); font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; padding: 4px 42px; background: var(--amber-soft); color: var(--amber); text-transform: uppercase; }
+.case[data-state="labo"]::after, .case[data-state="CKAD"]::after { background: var(--signal-soft); color: var(--signal); }
+.case-id { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-right: 70px; }
+.case h3 { margin: 0; font-family: var(--display); font-size: 22px; font-weight: 600; padding-right: 64px; text-wrap: balance; line-height: 1.2; }
+.case p { margin: 0; color: var(--muted); font-size: 14.5px; }
+.log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+.log li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 6px; color: var(--muted); font-size: 14.5px; }
+.log li::before { content: "›"; font-family: var(--mono); color: var(--amber); font-weight: 600; }
+.log li b { color: var(--fg); font-weight: 500; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 4px; }
+.tag { font-family: var(--mono); font-size: 11.5px; padding: 3px 8px; border-radius: 3px; border: 1px solid rgba(255,122,26,0.45); color: var(--amber); }
+.tag.learn { border-color: rgba(108,182,255,0.45); color: var(--signal); }
+
+/* Laboratoire */
+.lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; align-items: start; }
+.lab-text { display: flex; flex-direction: column; gap: 14px; color: var(--muted); }
+.lab-text p { margin: 0; }
+.lab-text strong { color: var(--fg); font-weight: 500; }
+.scenarios { display: flex; flex-wrap: wrap; gap: 8px; }
+.scenarios span { font-family: var(--mono); font-size: 12px; padding: 6px 10px; border-radius: 4px; background: var(--signal-soft); color: var(--signal); }
+.term { background: #0A0B0D; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; min-width: 0; }
+.term pre { margin: 0; padding: 18px; font-family: var(--mono); font-size: 13.5px; line-height: 1.75; color: var(--fg); overflow-x: auto; }
+.term .p { color: var(--amber); }
+.term .c { color: var(--muted); }
+.term .ok { color: var(--ok); }
+
+/* Compétences */
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.rules.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rule { background: rgba(22,24,28,0.92); border: 1px solid var(--line); border-radius: 8px; padding: 22px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.2s, transform 0.2s; }
+.rule:hover { border-color: var(--amber); transform: translateY(-2px); }
+.rule.learning:hover { border-color: var(--signal); }
+.rule-id { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.rule-id b { font-weight: 500; color: var(--ok); }
+.rule.learning .rule-id b { color: var(--signal); }
+.rule h3 { margin: 0; font-family: var(--display); font-size: 20px; font-weight: 600; letter-spacing: 0.01em; line-height: 1.2; }
+.rule ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; color: var(--muted); font-size: 14.5px; }
+.rule li strong { color: var(--fg); font-weight: 500; }
+
+/* Certifications */
+.road { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.road li { background: rgba(22,24,28,0.92); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+.road li.now { border-color: var(--signal); background: rgba(28,31,36,0.95); box-shadow: 0 0 0 3px var(--signal-soft); }
+.road .st { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.road li.now .st { color: var(--signal); }
+.road li.now .st::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); animation: blink 1.4s infinite; }
+@keyframes blink { 50% { opacity: 0.25; } }
+.road b { font-family: var(--display); font-size: 26px; font-weight: 700; line-height: 1; }
+.road li:last-child b { color: var(--amber); }
+.road small { color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+.road .step { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.extra { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 16px 18px; border: 1px dashed var(--line); border-radius: 8px; }
+.extra .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); }
+.extra b { font-family: var(--display); font-size: 18px; font-weight: 600; }
+.extra span { color: var(--muted); font-size: 14px; }
+
+/* Parcours */
+.timeline { display: flex; flex-direction: column; gap: 14px; }
+.event { display: grid; grid-template-columns: 220px minmax(0, 1fr); background: rgba(22,24,28,0.92); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.event.next { border-color: var(--signal); }
+.event-meta { padding: 20px 22px; border-right: 1px solid var(--line); background: var(--panel-2); display: flex; flex-direction: column; gap: 6px; }
+.kind { align-self: flex-start; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+.kind.xp { color: var(--amber); background: var(--amber-soft); }
+.kind.edu { color: var(--signal); background: var(--signal-soft); }
+.event-meta .when { font-family: var(--mono); font-size: 13px; color: var(--fg); }
+.event-body { padding: 20px 22px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.event-body h3 { margin: 0; font-family: var(--display); font-size: 20px; font-weight: 600; line-height: 1.2; }
+.event-body p { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+/* Console interactive */
+.shell { background: #0A0B0D; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.shell-out { height: 300px; overflow-y: auto; padding: 16px; font-family: var(--mono); font-size: 13.5px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.shell-out .p { color: var(--amber); }
+.shell-out .c { color: var(--fg); }
+.shell-out .o { color: var(--muted); }
+.shell-out .h { color: var(--signal); }
+.shell-form { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--line); padding: 10px 16px; }
+.shell-form label { font-family: var(--mono); font-size: 13.5px; color: var(--amber); white-space: nowrap; }
+.shell-form input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--fg); font-family: var(--mono); font-size: 15px; padding: 10px 0; caret-color: var(--amber); }
+.shell-form input:focus { outline: none; }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.quick button { font-family: var(--mono); font-size: 13px; background: var(--panel); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; cursor: pointer; }
+.quick button:hover { color: var(--amber); border-color: var(--amber); }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; align-items: center; background: var(--panel); border: 1px solid var(--amber); border-radius: 10px; padding: 40px; }
+.contact h2 { font-family: var(--display); font-weight: 700; font-size: clamp(32px, 4.6vw, 52px); line-height: 1; margin: 10px 0 0; text-transform: uppercase; text-wrap: balance; }
+.contact p { color: var(--muted); margin: 14px 0 0; max-width: 48ch; }
+.contact-lines { display: flex; flex-direction: column; gap: 10px; }
+.cline { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 10px 10px 10px 14px; min-height: 58px; }
+.cline div { min-width: 0; }
+.cline small { display: block; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+.cline span, .cline a { font-family: var(--mono); font-size: 14px; color: var(--fg); overflow-wrap: anywhere; }
+.copy { font-family: var(--mono); font-size: 12px; background: var(--amber-soft); color: var(--amber); border: 1px solid transparent; border-radius: 4px; padding: 10px 12px; cursor: pointer; white-space: nowrap; }
+.copy:hover { border-color: var(--amber); }
+footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+@media (max-width: 1060px) {
+  .rules.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .road { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 920px) {
+  .corner { display: none; }
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 48px 40px; }
+  .loop-wrap, .lab { grid-template-columns: minmax(0, 1fr); }
+  .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .event { grid-template-columns: minmax(0, 1fr); }
+  .event-meta { border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .contact { grid-template-columns: minmax(0, 1fr); padding: 28px 22px; }
+}
+@media (max-width: 640px) {
+  .rules, .rules.four, .cases, .phases { grid-template-columns: minmax(0, 1fr); }
+  .road { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nav { display: none; }
+  .feed-body { height: 300px; }
+  .ev { grid-template-columns: 54px 40px minmax(0, 1fr); padding: 7px 12px; }
+  section { padding-block: 48px; }
+}
+</style>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="scan" aria-hidden="true"></div>
+<div class="corner bl" aria-hidden="true">LABO KVM · 4 VM · HAPROXY<br>SEG 10.0.0.0/24</div>
+<div class="corner br" aria-hidden="true">NŒUDS <span id="nodes">0</span> · PAQUETS <span id="pkts">0</span><br>TLS 1.3 · CHIFFREMENT ACTIF</div>
+
+<header class="statusbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><b>&gt;_</b> EDNA·OULÉ <span class="live"><i></i>en ligne</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#pipeline">pipeline</a>
+      <a href="#dossiers">projets</a>
+      <a href="#labo">labo</a>
+      <a href="#competences">compétences</a>
+      <a href="#parcours">parcours</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <div class="eyebrow">Ingénierie Cloud · DevOps · Sécurité</div>
+      <h1 class="name">Edna Sephora <span>OULÉ</span></h1>
+      <p class="role">Je conçois, j'automatise et je sécurise des infrastructures cloud et des chaînes de déploiement. La sécurité, <em>dès la première étape</em>.</p>
+      <p class="lead">Issue de la supervision et de la cybersécurité, je construis aujourd'hui des pipelines CI/CD et des clusters Kubernetes dans mon propre laboratoire, en intégrant la sécurité à chaque étape.</p>
+      <div class="chips">
+        <span class="chip hot">recherche : <b>alternance Cloud, DevOps ou DevSecOps · février 2027</b></span>
+        <span class="chip">formation : <b>MSc Cloud, Epitech · 2027–2028</b></span>
+        <span class="chip">rythme : <b>2 semaines entreprise / 1 semaine école</b></span>
+        <span class="chip">zone : <b>Île-de-France</b></span>
+      </div>
+      <div class="ctas">
+        <a class="btn btn-main" href="#contact">Prendre contact</a>
+        <a class="btn btn-ghost" href="#console">Interroger la console</a>
+      </div>
+    </div>
+
+    <aside class="feed" aria-label="Flux d'événements">
+      <div class="panel-head"><strong>FLUX D'ÉVÉNEMENTS</strong><span>hôte : srv-devops</span></div>
+      <div class="feed-body" id="feed" aria-live="off">
+        <div class="ev"><time>08:58:12</time><span class="lvl l3">L3</span><span>Push sur Gitea : build Jenkins déclenché</span></div>
+        <div class="ev"><time>09:02:40</time><span class="lvl l3">L3</span><span>JaCoCo : rapport de couverture généré</span></div>
+        <div class="ev"><time>09:05:03</time><span class="lvl l7">L7</span><span>SonarQube : nouvelle vulnérabilité signalée</span></div>
+        <div class="ev"><time>09:11:27</time><span class="lvl l10">L10</span><span>Dependency-Check : bibliothèque vulnérable bloquée</span></div>
+        <div class="ev"><time>09:14:55</time><span class="lvl l3">L3</span><span>Image poussée sur Harbor, analyse Trivy lancée</span></div>
+        <div class="ev"><time>09:20:18</time><span class="lvl l3">L3</span><span>Déploiement Kubernetes : 3/3 pods prêts</span></div>
+      </div>
+      <div class="feed-foot"><span>étapes du pipeline <b>8</b></span><span>projets <b>8</b></span><span>événements <b id="count">6</b></span></div>
+    </aside>
+  </div>
+
+  <section id="pipeline">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Ce que je mets en place</div><h2>Une chaîne CI/CD sécurisée, de bout en bout</h2></div>
+        <p>Le pipeline que je construis dans mon laboratoire. Chaque étape a un rôle précis, et la sécurité intervient avant que le code n'atteigne le cluster.</p>
+      </div>
+      <div class="pipeline">
+        <div class="pipe-head">
+          <span>pipeline <b>#<span id="pid">482</span></b> · dépôt <b>oule</b> · branche <b>main</b> · commit <span class="sha" id="sha">a3f9c1e</span> · <span id="msg">feat: ajout du service de commandes</span></span>
+          <span class="badge running" id="pstate">en cours</span>
+        </div>
+        <div class="pipe-scroll" role="region" aria-label="Pipeline CI/CD animé" tabindex="0">
+          <div class="stages" id="stages">
+            <div class="stage"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="9" r="2"></circle><path d="M6 7v10M18 11c0 4-6 3-11 7"></path></svg></span><span class="stage-kind">source</span><span class="stage-name">Gitea</span><span class="stage-time"></span></div>
+            <div class="stage"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg></span><span class="stage-kind">orchestration</span><span class="stage-name">Jenkins</span><span class="stage-time"></span></div>
+            <div class="stage"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"></path></svg></span><span class="stage-kind">tests</span><span class="stage-name">JaCoCo + PIT</span><span class="stage-time"></span></div>
+            <div class="stage sec"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"></path></svg></span><span class="stage-kind">sécurité du code</span><span class="stage-name">SonarQube</span><span class="stage-time"></span></div>
+            <div class="stage sec"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></span><span class="stage-kind">dépendances</span><span class="stage-name">OWASP Dependency-Check</span><span class="stage-time"></span></div>
+            <div class="stage"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"></path><path d="M3 8l9 5 9-5M12 13v8"></path></svg></span><span class="stage-kind">packaging</span><span class="stage-name">Docker</span><span class="stage-time"></span></div>
+            <div class="stage sec"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="M20 20l-4.5-4.5"></path></svg></span><span class="stage-kind">registre sécurisé</span><span class="stage-name">Harbor + Trivy</span><span class="stage-time"></span></div>
+            <div class="stage"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8.5 4.5v9L12 22l-8.5-6.5v-9z"></path><circle cx="12" cy="12" r="3"></circle></svg></span><span class="stage-kind">exécution</span><span class="stage-name">Kubernetes</span><span class="stage-time"></span></div>
+          </div>
+        </div>
+      </div>
+      <p class="pipe-note">Chaque contrôle joue un rôle distinct : <b>les tests</b> vérifient que le code fonctionne, <b>SonarQube</b> repère les failles dans le code source, <b>OWASP Dependency-Check</b> signale les bibliothèques vulnérables pour qu'elles soient corrigées avant la construction de l'image, et <b>Trivy</b> détecte les vulnérabilités connues dans l'image finale. Ce pipeline continue d'évoluer au fil de mes apprentissages.</p>
+    </div>
+  </section>
+
+  <section id="boucle">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Approche</div><h2>La boucle DevSecOps</h2></div>
+        <p>La sécurité n'est pas une étape finale : elle accompagne chaque phase du cycle. Voici les outils que j'utilise à chacune.</p>
+      </div>
+      <div class="loop-wrap">
+        <figure class="loop-fig">
+          <svg viewBox="60 40 780 260" role="img" aria-label="Boucle DevSecOps : planifier, coder, construire, tester côté Dev ; publier, déployer, exploiter, superviser côté Ops ; la sécurité au centre.">
+            <path id="loopPath" class="track" d="M450 170 C 380 70, 200 70, 140 170 C 200 270, 380 270, 450 170 C 520 70, 700 70, 760 170 C 700 270, 520 270, 450 170 Z"></path>
+            <path class="dev" d="M450 170 C 380 70, 200 70, 140 170 C 200 270, 380 270, 450 170"></path>
+            <path class="ops" d="M450 170 C 520 70, 700 70, 760 170 C 700 270, 520 270, 450 170"></path>
+            <text class="side d" x="292" y="178" text-anchor="middle">DEV</text>
+            <text class="side o" x="608" y="178" text-anchor="middle">OPS</text>
+            <circle class="ph d" cx="380" cy="114" r="8"></circle><text class="lbl" x="380" y="90" text-anchor="middle">plan</text>
+            <circle class="ph d" cx="204" cy="114" r="8"></circle><text class="lbl" x="204" y="90" text-anchor="middle">code</text>
+            <circle class="ph d" cx="204" cy="226" r="8"></circle><text class="lbl" x="204" y="262" text-anchor="middle">build</text>
+            <circle class="ph d" cx="380" cy="226" r="8"></circle><text class="lbl" x="380" y="262" text-anchor="middle">test</text>
+            <circle class="ph o" cx="520" cy="114" r="8"></circle><text class="lbl" x="520" y="90" text-anchor="middle">release</text>
+            <circle class="ph o" cx="696" cy="114" r="8"></circle><text class="lbl" x="696" y="90" text-anchor="middle">deploy</text>
+            <circle class="ph o" cx="696" cy="226" r="8"></circle><text class="lbl" x="696" y="262" text-anchor="middle">operate</text>
+            <circle class="ph o" cx="520" cy="226" r="8"></circle><text class="lbl" x="520" y="262" text-anchor="middle">monitor</text>
+            <path class="shield" d="M450 142 l22 10 v14 c0 14-10 23-22 26 c-12-3-22-12-22-26 v-14 z"></path>
+            <text class="sec" x="450" y="174" text-anchor="middle">SEC</text>
+            <circle class="runner" r="5"><animateMotion dur="9s" repeatCount="indefinite" rotate="auto"><mpath href="#loopPath"></mpath></animateMotion></circle>
+          </svg>
+        </figure>
+        <ul class="phases">
+          <li class="d"><b>plan</b><span>Choix d'architecture : outils de CI séparés du cluster applicatif.</span></li>
+          <li class="d"><b>code</b><span>Dépôt Git auto-hébergé sur Gitea.</span></li>
+          <li class="d"><b>build</b><span>Pipelines Jenkins et images Docker.</span></li>
+          <li class="d"><b>test</b><span>JaCoCo, PIT, SonarQube et OWASP Dependency-Check.</span></li>
+          <li class="o"><b>release</b><span>Publication sur Harbor, analyse par Trivy.</span></li>
+          <li class="o"><b>deploy</b><span>Kubernetes : Ingress, StatefulSet, RBAC et Secrets.</span></li>
+          <li class="o"><b>operate</b><span>Bastions Guacamole et Teleport, sauvegardes Bacula.</span></li>
+          <li class="o"><b>monitor</b><span>Wazuh, Centreon et Kibana.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="dossiers">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Projets</div><h2>Dossiers techniques</h2></div>
+        <p>Des projets menés sur une infrastructure réelle, documentés et vérifiés sur des systèmes en fonctionnement.</p>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Réalisations techniques</p>
+        <div class="cases">
+          <article class="case" data-state="labo">
+            <span class="case-id">DOSSIER #001 · Déploiement et intégration continue</span>
+            <h3>Pipeline CI/CD du projet OULE</h3>
+            <p>Application composée d'un frontend React et d'un backend Spring Boot, réunis dans un seul dépôt. J'ai pris en charge toute la partie construction et livraison.</p>
+            <ul class="log">
+              <li><span>Pipelines <b>Jenkins</b> déclenchés depuis le dépôt <b>Gitea</b>.</span></li>
+              <li><span>Couverture des tests unitaires avec <b>JaCoCo</b> et robustesse évaluée par tests de mutation avec <b>PIT</b>.</span></li>
+              <li><span>Intégration de <b>SonarQube</b>, déployé avec Docker aux côtés de Jenkins.</span></li>
+              <li><span>Analyse des dépendances avec <b>OWASP Dependency-Check</b>, afin de corriger les failles avant la construction de l'image.</span></li>
+              <li><span>Publication des images sur <b>Harbor</b>, avec analyse des vulnérabilités par <b>Trivy</b>.</span></li>
+              <li><span>Déploiement sur Kubernetes avec un <b>Ingress Controller</b> pour gérer le trafic interne et rendre l'application accessible.</span></li>
+              <li><span>Base de données déployée avec un <b>StatefulSet</b>, pour conserver ses données et son identité réseau.</span></li>
+              <li><span>Choix d'architecture justifié : outils de CI séparés du cluster applicatif.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Jenkins</span><span class="tag">Gitea</span><span class="tag">JaCoCo</span><span class="tag">PIT</span><span class="tag">SonarQube</span><span class="tag">OWASP Dependency-Check</span><span class="tag">Docker</span><span class="tag">Harbor</span><span class="tag">Trivy</span><span class="tag">Ingress</span><span class="tag">StatefulSet</span></div>
+          </article>
+          <article class="case" data-state="CKAD">
+            <span class="case-id">DOSSIER #002 · Projet personnel</span>
+            <h3>k8s-portfolio-app</h3>
+            <p>Une API Flask connectée à Redis, conteneurisée puis déployée sur Kubernetes en appliquant les bonnes pratiques de sécurité.</p>
+            <ul class="log">
+              <li><span>Configuration externalisée via <b>ConfigMap</b> et mot de passe Redis injecté par un <b>Secret</b>.</span></li>
+              <li><span><b>SecurityContext</b> pour exécuter les conteneurs sans privilèges root.</span></li>
+              <li><span><b>ServiceAccount</b> dédié avec Role et RoleBinding, selon le principe du moindre privilège.</span></li>
+              <li><span>Requêtes et limites de ressources définies ; environnements séparés par <b>namespaces</b>.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Python/Flask</span><span class="tag">Redis</span><span class="tag">Harbor</span><span class="tag">Kubernetes</span><span class="tag">RBAC</span></div>
+          </article>
+          <article class="case" data-state="production">
+            <span class="case-id">DOSSIER #003 · LOGIPROX · expérience professionnelle</span>
+            <h3>Supervision, sauvegarde et accès sécurisés</h3>
+            <p>À partir des besoins exprimés par l'entreprise, j'ai choisi et déployé les outils de supervision, de détection, de sauvegarde et d'accès à distance.</p>
+            <ul class="log">
+              <li><span><b>Centreon</b> pour la disponibilité et la performance des équipements.</span></li>
+              <li><span><b>Wazuh</b> pour la détection d'incidents de sécurité et la conformité.</span></li>
+              <li><span><b>Bacula</b> pour la gestion centralisée des sauvegardes sur une architecture multi-stockages (NAS et serveurs dédiés).</span></li>
+              <li><span><b>Apache Guacamole</b> comme bastion d'administration à distance.</span></li>
+              <li><span>Accès à l'ensemble de ces services par un reverse proxy <b>Nginx</b> avec certificat SSL.</span></li>
+              <li><span>Infrastructure hébergée sur le cloud public <b>OVHcloud</b>.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Centreon</span><span class="tag">Wazuh</span><span class="tag">Bacula</span><span class="tag">Guacamole</span><span class="tag">Nginx</span><span class="tag">SSL/TLS</span><span class="tag">OVHcloud</span></div>
+          </article>
+          <article class="case" data-state="labo">
+            <span class="case-id">DOSSIER #004 · Projet personnel · infrastructure</span>
+            <h3>Cluster Kubernetes avec kubeadm</h3>
+            <p>Construction et dépannage d'un cluster multi-nœuds sur des machines virtuelles RHEL/Rocky Linux 8.</p>
+            <ul class="log">
+              <li><span>Migration vers <b>cgroups v2</b> et correction du plugin CRI de <b>containerd</b>.</span></li>
+              <li><span>Déploiement du réseau de pods avec <b>Calico</b> et <b>Flannel</b>.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">kubeadm</span><span class="tag">containerd</span><span class="tag">Calico</span><span class="tag">Flannel</span><span class="tag">KVM</span></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-label">Projets universitaires · EFREI Paris</p>
+        <div class="cases">
+          <article class="case" data-state="EFREI">
+            <span class="case-id">DOSSIER #005 · Projet annuel · septembre 2024 à juin 2025</span>
+            <h3>Bastion d'administration avec Teleport</h3>
+            <p>Projet que j'ai proposé dans le cadre de mon alternance : un point d'entrée unique et contrôlé pour administrer les serveurs à distance.</p>
+            <ul class="log">
+              <li><span>Accès aux serveurs par un point d'entrée unique, sans les exposer directement sur le réseau.</span></li>
+              <li><span>Centralisation et contrôle des accès d'administration.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Teleport</span><span class="tag">Bastion</span><span class="tag">SSH</span></div>
+          </article>
+          <article class="case" data-state="EFREI">
+            <span class="case-id">DOSSIER #006 · Projet annuel · septembre 2023 à juin 2024</span>
+            <h3>Infrastructure cloud multi-tiers</h3>
+            <p>Conception d'une plateforme de commerce en ligne pour une entreprise fictive, puis sécurisation complète de la plateforme web.</p>
+            <ul class="log">
+              <li><span>Mise en place d'un <b>certificat SSL</b>.</span></li>
+              <li><span>Gestion des identités et des accès.</span></li>
+              <li><span>Détection d'intrusion et protection contre les <b>injections SQL</b> et les attaques <b>XSS</b>.</span></li>
+              <li><span>Surveillance quotidienne des journaux.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Cloud</span><span class="tag">SSL/TLS</span><span class="tag">IAM</span><span class="tag">IDS</span></div>
+          </article>
+          <article class="case" data-state="EFREI">
+            <span class="case-id">DOSSIER #007 · Septembre à novembre 2023</span>
+            <h3>Gestion de parc informatique</h3>
+            <p>Déploiement d'un serveur Windows 2019, d'un serveur GLPI et de deux postes clients pour inventorier automatiquement le parc.</p>
+            <ul class="log">
+              <li><span>Stratégie de groupe (<b>GPO</b>) installant <b>FusionInventory</b> sur chaque nouvelle machine intégrée au domaine.</span></li>
+              <li><span>Annuaire <b>Active Directory</b> et serveur <b>GLPI</b> sur une pile LAMP.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">GLPI</span><span class="tag">Active Directory</span><span class="tag">GPO</span><span class="tag">Vagrant</span><span class="tag">VMware</span></div>
+          </article>
+          <article class="case" data-state="EFREI">
+            <span class="case-id">DOSSIER #008 · Septembre 2023</span>
+            <h3>Infrastructure sécurisée</h3>
+            <p>Mise en place d'une infrastructure disponible, accessible à distance de façon sécurisée et supervisée.</p>
+            <ul class="log">
+              <li><span>Répartition de charge et haute disponibilité avec <b>HAProxy</b>.</span></li>
+              <li><span>Accès distant chiffré par <b>VPN</b>.</span></li>
+              <li><span>Supervision avec <b>Zabbix</b>.</span></li>
+              <li><span>Politique de sécurité pour la gestion des accès des utilisateurs.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">HAProxy</span><span class="tag">VPN</span><span class="tag">Zabbix</span></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="labo">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Laboratoire</div><h2>Mon infrastructure d'entraînement</h2></div>
+      </div>
+      <div class="lab">
+        <div class="lab-text">
+          <p>Je travaille sur un <strong>serveur personnel</strong> qui héberge des machines virtuelles <strong>KVM</strong> : un cluster Kubernetes, un serveur dédié à la chaîne CI/CD et un <strong>HAProxy</strong> qui rend les services accessibles depuis l'extérieur. C'est là que je reproduis des situations réelles.</p>
+          <div class="scenarios"><span>panne d'un nœud</span><span>mise à jour du cluster</span><span>analyse d'un pipeline qui échoue</span></div>
+          <p>Ce laboratoire me permet d'apprendre en manipulant, puis de documenter chaque procédure.</p>
+        </div>
+        <div class="term">
+          <div class="panel-head"><strong>srv-devops</strong><span>bash</span></div>
+<pre aria-label="Inventaire des machines du laboratoire"><span class="p">oule@srv-devops:~$</span> virsh list --name
+<span class="c"># cluster Kubernetes</span>
+control-plane-srv   <span class="c"># plan de contrôle</span>
+worker-srv          <span class="c"># nœud de travail</span>
+<span class="c"># chaîne CI/CD (conteneurs Docker)</span>
+jenkins-srv         <span class="c"># Jenkins, Harbor, SonarQube,</span>
+                    <span class="c"># OWASP Dependency-Check</span>
+<span class="c"># accès depuis l'extérieur</span>
+hp-srv              <span class="c"># proxy HAProxy</span>
+<span class="p">oule@srv-devops:~$</span> <span class="ok">4 machines actives</span></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="competences">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Compétences</div><h2>Ce que je maîtrise et ce que je développe</h2></div>
+        <p>Les règles en orange sont acquises. Les règles en bleu sont en cours d'apprentissage, sur le versant DevOps et DevSecOps.</p>
+      </div>
+
+      <div class="group">
+        <p class="group-label"><b>● acquises</b></p>
+        <div class="rules">
+          <article class="rule">
+            <div class="rule-id"><b>active</b><span>rule 1001</span></div>
+            <h3>Systèmes et réseaux</h3>
+            <ul><li><strong>Linux</strong> : RHEL, Rocky, Ubuntu</li><li><strong>Bash</strong> et administration système</li><li><strong>Virtualisation</strong> KVM / libvirt, VMware, Vagrant</li><li><strong>Nginx</strong> (reverse proxy, SSL)</li><li><strong>Bacula</strong> (sauvegardes)</li></ul>
+          </article>
+          <article class="rule">
+            <div class="rule-id"><b>active</b><span>rule 1002</span></div>
+            <h3>Supervision</h3>
+            <ul><li><strong>Centreon</strong></li><li><strong>Kibana</strong></li><li><strong>Supervision</strong> télécom et infrastructure</li></ul>
+          </article>
+          <article class="rule">
+            <div class="rule-id"><b>active</b><span>rule 1003</span></div>
+            <h3>Sécurité</h3>
+            <ul><li><strong>Wazuh</strong> (SIEM / XDR)</li><li><strong>Apache Guacamole</strong> (bastion)</li><li><strong>Active Directory</strong></li><li><strong>RGPD</strong> et conformité</li></ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-label"><b class="learn">● en cours d'apprentissage · DevOps et DevSecOps</b></p>
+        <div class="rules four">
+          <article class="rule learning">
+            <div class="rule-id"><b>en test</b><span>rule 2001</span></div>
+            <h3>Conteneurs et orchestration</h3>
+            <ul><li><strong>Docker</strong></li><li><strong>Kubernetes</strong> : Pods, Deployments, Services</li><li><strong>ConfigMaps, Secrets</strong>, RBAC</li><li><strong>Taints, NodeAffinity</strong></li></ul>
+          </article>
+          <article class="rule learning">
+            <div class="rule-id"><b>en test</b><span>rule 2002</span></div>
+            <h3>CI/CD et automatisation</h3>
+            <ul><li><strong>Jenkins</strong>, Gitea, GitLab CE</li><li><strong>Harbor</strong> (registre d'images)</li><li><strong>Git</strong></li><li><strong>Ansible</strong></li></ul>
+          </article>
+          <article class="rule learning">
+            <div class="rule-id"><b>en test</b><span>rule 2003</span></div>
+            <h3>Sécurité du pipeline</h3>
+            <ul><li><strong>SonarQube</strong> (analyse statique)</li><li><strong>OWASP Dependency-Check</strong> (dépendances)</li><li><strong>Trivy</strong> (analyse des images)</li><li><strong>JaCoCo, PIT</strong> (qualité des tests)</li></ul>
+          </article>
+          <article class="rule learning">
+            <div class="rule-id"><b>en test</b><span>rule 2004</span></div>
+            <h3>Programmation</h3>
+            <ul><li><strong>Python</strong></li><li><strong>Algorithmique</strong></li></ul>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="parcours">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Parcours</div><h2>Expérience et formation</h2></div>
+      </div>
+      <div class="timeline">
+        <article class="event next">
+          <div class="event-meta"><span class="kind edu">formation · à venir</span><span class="when">2027 – 2028</span></div>
+          <div class="event-body"><h3>MSc Cloud, Epitech</h3><p>Formation en présentiel, en alternance à partir de février 2027.</p></div>
+        </article>
+        <article class="event">
+          <div class="event-meta"><span class="kind xp">expérience</span><span class="when">2024 – 2026</span></div>
+          <div class="event-body"><h3>Infrastructure et sécurité, LOGIPROX</h3><p>Choix des technologies et mise en place de Centreon, Wazuh, Bacula et Apache Guacamole, accessibles par un reverse proxy Nginx avec certificat SSL.</p></div>
+        </article>
+        <article class="event">
+          <div class="event-meta"><span class="kind edu">formation</span><span class="when">2023 – 2025</span></div>
+          <div class="event-body"><h3>Mastère Cybersécurité et Cloud, EFREI Paris</h3><p>Sécurité des systèmes d'information, architectures cloud et gouvernance.</p></div>
+        </article>
+        <article class="event">
+          <div class="event-meta"><span class="kind xp">expérience</span><span class="when">2022 – 2023</span></div>
+          <div class="event-body"><h3>Consultante en supervision des services réseaux, Orange Côte d'Ivoire</h3><p>Supervision en temps réel des services avec Centreon, Kibana, Kapptivate et Daset ; détection, analyse et qualification des incidents ; tests de bon fonctionnement.</p></div>
+        </article>
+        <article class="event">
+          <div class="event-meta"><span class="kind edu">formation</span><span class="when">2017 – 2022</span></div>
+          <div class="event-body"><h3>Master professionnel en Télécommunications, ISTC Polytechnique Abidjan</h3><p>Télécommunications et technologies de l'audiovisuel.</p></div>
+        </article>
+      </div>
+      <div class="extra"><span class="label">Formation complémentaire</span><b>The Ultimate DevOps Bootcamp</b><span>Udemy · certificat de réussite</span></div>
+    </div>
+  </section>
+
+  <section id="console">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">Interactif</div><h2>Interrogez ma console</h2></div>
+        <p>Tapez une commande, ou utilisez les raccourcis. Commencez par <span class="mono">help</span>.</p>
+      </div>
+      <div class="shell">
+        <div class="shell-out" id="out" role="log" aria-live="polite"></div>
+        <form class="shell-form" id="shell">
+          <label for="cmd">recruteur@oule:~$</label>
+          <input id="cmd" name="cmd" autocomplete="off" spellcheck="false" placeholder="help">
+        </form>
+      </div>
+      <div class="quick" aria-label="Commandes rapides">
+        <button type="button" data-cmd="whoami">whoami</button>
+        <button type="button" data-cmd="pipeline">pipeline</button>
+        <button type="button" data-cmd="projets">projets</button>
+        <button type="button" data-cmd="labo">labo</button>
+        <button type="button" data-cmd="contact">contact</button>
+        <button type="button" data-cmd="clear">clear</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <div class="eyebrow">Contact</div>
+          <h2>Ticket ouvert : alternance Cloud et DevOps</h2>
+          <p>Je recherche une entreprise d'accueil pour une alternance en ingénierie cloud, DevOps ou DevSecOps à partir de février 2027. Assignez-moi le ticket.</p>
+        </div>
+        <div class="contact-lines">
+          <div class="cline"><div><small>Localisation</small><span>Île-de-France</span></div></div>
+          <div class="cline"><div><small>Disponibilité</small><span>Immédiate</span></div></div>
+          <div class="cline"><div><small>E-mail</small><span id="mail">ednasephora@gmail.com</span></div><button class="copy" type="button" data-copy="mail">Copier</button></div>
+          <div class="cline"><div><small>LinkedIn</small><a href="https://www.linkedin.com/in/oule-sephora">linkedin.com/in/oule-sephora</a></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap"><span>Edna Sephora OULÉ · Portfolio Cloud, DevOps et Sécurité · 2026</span><span>exit 0</span></footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  /* Flux d'événements */
+  var events = [
+    ['l3', 'Push sur Gitea : build Jenkins déclenché'],
+    ['l3', 'PIT : tests de mutation terminés'],
+    ['l7', 'SonarQube : code smell à corriger'],
+    ['l10', 'Trivy : CVE critique détectée dans l’image'],
+    ['l3', 'Image corrigée et republiée sur Harbor'],
+    ['l3', 'Pod redémarré sous SecurityContext non root'],
+    ['l7', 'Wazuh : tentative SSH répétée détectée'],
+    ['l3', 'Sauvegarde Bacula terminée : NAS + serveur dédié'],
+    ['l3', 'Session d’administration via le bastion Guacamole'],
+    ['l7', 'Centreon : seuil CPU dépassé sur worker-srv'],
+    ['l3', 'Secret Redis monté par le ServiceAccount dédié']
+  ];
+  var feed = document.getElementById('feed');
+  var countEl = document.getElementById('count');
+  var count = 6, i = 0;
+  function push() {
+    var e = events[i % events.length]; i++;
+    var d = new Date();
+    var row = document.createElement('div'); row.className = 'ev new';
+    var t = document.createElement('time'); t.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    var l = document.createElement('span'); l.className = 'lvl ' + e[0]; l.textContent = e[0].toUpperCase();
+    var m = document.createElement('span'); m.textContent = e[1];
+    row.appendChild(t); row.appendChild(l); row.appendChild(m);
+    var prev = feed.querySelector('.ev.new'); if (prev) prev.classList.remove('new');
+    feed.appendChild(row);
+    while (feed.children.length > 12) feed.removeChild(feed.firstElementChild);
+    count++; countEl.textContent = count;
+  }
+  if (!reduce) setInterval(push, 2600);
+
+  /* Pipeline CI/CD */
+  var stages = Array.prototype.slice.call(document.querySelectorAll('#stages .stage'));
+  var pstate = document.getElementById('pstate');
+  var pidEl = document.getElementById('pid'), shaEl = document.getElementById('sha'), msgEl = document.getElementById('msg');
+  var msgs = ['feat: ajout du service de commandes', 'fix: mise à jour d’une dépendance vulnérable', 'test: renforcement des tests de mutation', 'ci: publication de l’image vers Harbor', 'chore: image de base allégée', 'feat(front): page du panier en React'];
+  var pid = 482, cur = 0, mi = 0;
+  function hex() { return Math.random().toString(16).slice(2, 9).padEnd(7, '0'); }
+  function setState(s) { pstate.className = 'badge ' + s; pstate.textContent = s === 'passed' ? 'réussi' : 'en cours'; }
+  function resetPipe() {
+    stages.forEach(function (s) { s.classList.remove('passed', 'running'); s.querySelector('.stage-time').textContent = ''; });
+    pid++; pidEl.textContent = pid; shaEl.textContent = hex(); mi = (mi + 1) % msgs.length; msgEl.textContent = msgs[mi];
+    cur = 0; setState('running');
+  }
+  function stepPipe() {
+    if (cur > 0) {
+      var prev = stages[cur - 1];
+      prev.classList.remove('running'); prev.classList.add('passed');
+      prev.querySelector('.stage-time').textContent = (6 + Math.floor(Math.random() * 55)) + ' s';
+    }
+    if (cur < stages.length) { stages[cur].classList.add('running'); cur++; setTimeout(stepPipe, 1250); }
+    else { setState('passed'); setTimeout(function () { resetPipe(); stepPipe(); }, 3500); }
+  }
+  if (reduce) {
+    var times = [2, 4, 48, 37, 52, 26, 31, 19];
+    stages.forEach(function (s, k) { s.classList.add('passed'); s.querySelector('.stage-time').textContent = times[k] + ' s'; });
+    setState('passed');
+    var am = document.querySelector('.loop-fig animateMotion'); if (am) am.parentNode.parentNode.removeChild(am.parentNode);
+  } else { stepPipe(); }
+
+  /* Fond : topologie réseau avec paquets et pods */
+  var cv = document.getElementById('net');
+  var ctx = cv.getContext && cv.getContext('2d');
+  if (ctx) {
+    var W = 0, H = 0, dpr = 1, nodes = [], pkts = [], sent = 0, LINK = 160;
+    var nodesEl = document.getElementById('nodes'), pktsEl = document.getElementById('pkts');
+    var size = function () {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.max(18, Math.min(70, Math.round(W * H / 24000)));
+      nodes = [];
+      for (var k = 0; k < n; k++) {
+        nodes.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18, srv: Math.random() < 0.22, pod: Math.random() < 0.5, ph: Math.random() * 6.28 });
+      }
+      pkts = [];
+      nodesEl.textContent = n;
+    };
+    var links = function () {
+      var out = [];
+      for (var a = 0; a < nodes.length; a++) for (var b = a + 1; b < nodes.length; b++) {
+        var dx = nodes[a].x - nodes[b].x, dy = nodes[a].y - nodes[b].y, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < LINK) out.push([a, b, d]);
+      }
+      return out;
+    };
+    var frame = function (t, still) {
+      ctx.clearRect(0, 0, W, H);
+      if (!still) nodes.forEach(function (p) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20;
+        if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20;
+      });
+      var L = links();
+      ctx.lineWidth = 1;
+      L.forEach(function (l) {
+        var A = nodes[l[0]], B = nodes[l[1]];
+        ctx.strokeStyle = 'rgba(108,182,255,' + (0.16 * (1 - l[2] / LINK)).toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+      });
+      if (!still && L.length && Math.random() < 0.06 && pkts.length < 14) {
+        var l = L[Math.floor(Math.random() * L.length)];
+        var flip = Math.random() < 0.5;
+        pkts.push({ a: flip ? l[0] : l[1], b: flip ? l[1] : l[0], t: 0, hot: Math.random() < 0.25 });
+        sent++; pktsEl.textContent = sent;
+      }
+      pkts = pkts.filter(function (k) { return k.t <= 1; });
+      pkts.forEach(function (k) {
+        k.t += 0.012;
+        var A = nodes[k.a], B = nodes[k.b];
+        var x = A.x + (B.x - A.x) * k.t, y = A.y + (B.y - A.y) * k.t;
+        var c = k.hot ? '255,122,26' : '108,182,255';
+        var g = ctx.createRadialGradient(x, y, 0, x, y, 10);
+        g.addColorStop(0, 'rgba(' + c + ',0.55)'); g.addColorStop(1, 'rgba(' + c + ',0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 10, 0, 6.28); ctx.fill();
+        ctx.fillStyle = 'rgba(' + c + ',0.95)'; ctx.beginPath(); ctx.arc(x, y, 1.8, 0, 6.28); ctx.fill();
+      });
+      nodes.forEach(function (p) {
+        if (p.srv) {
+          var pulse = still ? 0.5 : 0.5 + 0.5 * Math.sin(t / 700 + p.ph);
+          ctx.strokeStyle = 'rgba(255,122,26,' + (0.25 + 0.35 * pulse).toFixed(3) + ')';
+          if (p.pod) {
+            ctx.beginPath();
+            for (var h = 0; h < 6; h++) { var an = Math.PI / 3 * h + Math.PI / 6; ctx.lineTo(p.x + 6 * Math.cos(an), p.y + 6 * Math.sin(an)); }
+            ctx.closePath(); ctx.stroke();
+          } else { ctx.strokeRect(p.x - 4, p.y - 4, 8, 8); }
+          ctx.strokeStyle = 'rgba(255,122,26,' + (0.12 * pulse).toFixed(3) + ')';
+          ctx.beginPath(); ctx.arc(p.x, p.y, 10 + 8 * pulse, 0, 6.28); ctx.stroke();
+        } else {
+          ctx.fillStyle = 'rgba(163,163,170,0.5)';
+          ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, 6.28); ctx.fill();
+        }
+      });
+    };
+    size();
+    window.addEventListener('resize', function () { size(); if (reduce) frame(0, true); });
+    if (reduce) { frame(0, true); }
+    else { (function loop(t) { if (!document.hidden) frame(t || 0, false); requestAnimationFrame(loop); })(); }
+  }
+
+  /* Console interactive */
+  var out = document.getElementById('out');
+  var form = document.getElementById('shell');
+  var input = document.getElementById('cmd');
+  var cmds = {
+    help: [['h', 'Commandes disponibles :'], ['o', '  whoami        qui je suis'], ['o', '  pipeline      ma chaîne CI/CD'], ['o', '  projets       mes dossiers techniques'], ['o', '  labo          mon infrastructure d’entraînement'], ['o', '  competences   ce que je maîtrise'], ['o', '  parcours      expérience et formation'], ['o', '  contact       me joindre'], ['o', '  clear         vider l’écran']],
+    whoami: [['h', 'Edna Sephora OULÉ'], ['o', 'Profil cybersécurité, en formation ingénierie Cloud, DevOps et sécurité.'], ['o', 'Recherche une alternance Cloud, DevOps ou DevSecOps à partir de février 2027 (MSc Cloud, Epitech).']],
+    pipeline: [['h', 'Chaîne CI/CD du laboratoire :'], ['o', '  Gitea → Jenkins → JaCoCo + PIT → SonarQube'], ['o', '  → OWASP Dependency-Check → Docker → Harbor + Trivy → Kubernetes']],
+    projets: [['h', 'Dossiers techniques :'], ['o', '  #001  Pipeline CI/CD du projet OULE'], ['o', '  #002  k8s-portfolio-app (Flask, Redis, RBAC)'], ['o', '  #003  Supervision, sauvegarde et accès sécurisés (LOGIPROX)'], ['o', '  #004  Cluster Kubernetes avec kubeadm'], ['h', 'Projets universitaires (EFREI Paris) :'], ['o', '  #005  Bastion Teleport   #006  Cloud multi-tiers'], ['o', '  #007  Parc informatique GLPI   #008  Infrastructure sécurisée']],
+    labo: [['h', 'srv-devops : hyperviseur KVM'], ['o', '  control-plane-srv : plan de contrôle'], ['o', '  worker-srv        : nœud de travail'], ['o', '  jenkins-srv       : Jenkins, Harbor, SonarQube, Dependency-Check'], ['o', '  hp-srv            : HAProxy, accès depuis l\u2019extérieur']],
+    competences: [['h', 'Acquises :'], ['o', '  Linux, Bash, KVM, Nginx, Bacula, Centreon, Kibana,'], ['o', '  Wazuh, Guacamole, Active Directory, RGPD'], ['h', 'En apprentissage :'], ['o', '  Docker, Kubernetes, Jenkins, Gitea, GitLab CE, Harbor,'], ['o', '  Ansible, SonarQube, Dependency-Check, Trivy, Python']],
+    parcours: [['h', 'Chronologie :'], ['o', '  2027-2028  MSc Cloud, Epitech (alternance)'], ['o', '  2024-2026  Infrastructure et sécurité, LOGIPROX'], ['o', '  2023-2025  Mastère Cybersécurité et Cloud, EFREI Paris'], ['o', '  2022-2023  Supervision des services réseaux, Orange CI'], ['o', '  2017-2022  Master Télécommunications, ISTC Polytechnique'], ['o', '  +          The Ultimate DevOps Bootcamp (Udemy)']],
+    contact: [['h', 'Ouvrir un ticket :'], ['o', '  localisation   Île-de-France'], ['o', '  disponibilité  immédiate'], ['o', '  linkedin       linkedin.com/in/oule-sephora'], ['o', '  e-mail         ' + document.getElementById('mail').textContent]]
+  };
+  cmds['compétences'] = cmds.competences;
+  function line(cls, text) { var s = document.createElement('div'); s.className = cls; s.textContent = text; out.appendChild(s); }
+  function run(raw) {
+    var c = raw.trim().toLowerCase();
+    if (!c) return;
+    var row = document.createElement('div');
+    var p = document.createElement('span'); p.className = 'p'; p.textContent = 'recruteur@oule:~$ ';
+    var t = document.createElement('span'); t.className = 'c'; t.textContent = raw.trim();
+    row.appendChild(p); row.appendChild(t); out.appendChild(row);
+    if (c === 'clear') { out.textContent = ''; return; }
+    if (c === 'sudo' || c.indexOf('sudo ') === 0) { line('o', 'Accès refusé : principe du moindre privilège. Proposez-moi plutôt un entretien.'); }
+    else if (cmds[c]) { cmds[c].forEach(function (l) { line(l[0], l[1]); }); }
+    else { line('o', 'Commande inconnue : ' + c + '. Tapez help pour voir la liste.'); }
+    out.scrollTop = out.scrollHeight;
+  }
+  line('h', 'Console de profil v2.0. Connexion établie.');
+  line('o', 'Tapez help pour commencer.');
+  run('whoami');
+  form.addEventListener('submit', function (e) { e.preventDefault(); run(input.value); input.value = ''; });
+  document.querySelectorAll('.quick button').forEach(function (b) {
+    b.addEventListener('click', function () { run(b.getAttribute('data-cmd')); });
+  });
+
+  /* Copie de l'e-mail */
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var el = document.getElementById(b.getAttribute('data-copy'));
+      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = 'Copier'; }, 1600); };
+      var fallback = function () { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Sélectionné'; };
+      try { navigator.clipboard.writeText(el.textContent).then(done, fallback); } catch (err) { fallback(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
