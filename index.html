@@ -94,6 +94,40 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .btn-ghost { background: transparent; color: var(--amber); }
 .btn-ghost:hover { background: var(--amber-soft); }
 
+/* Éléments ajoutés : badge, titre animé, photo, chiffres, CV */
+.hiring { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 7px 14px; border: 1px solid rgba(79,209,139,0.45); border-radius: 999px; background: rgba(79,209,139,0.1); font-family: var(--mono); font-size: 12.5px; color: var(--ok); }
+.hiring i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); animation: ping 2s infinite; }
+.iam { margin: 18px 0 0; font-family: var(--mono); font-size: 14px; color: var(--muted); }
+.typed { margin: 8px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(22px, 2.6vw, 30px); color: var(--fg); min-height: 1.3em; }
+.typed b { color: var(--amber); font-weight: 700; }
+.caret { display: inline-block; width: 3px; height: 1em; margin-left: 4px; vertical-align: -0.12em; background: var(--amber); animation: caretblink 1s step-end infinite; }
+@keyframes caretblink { 50% { opacity: 0; } }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 24px; max-width: 520px; }
+.stat { background: rgba(22,24,28,0.9); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.stat b { font-family: var(--display); font-size: 30px; font-weight: 700; line-height: 1; color: var(--amber); }
+.stat span { font-family: var(--mono); font-size: 11.5px; color: var(--muted); line-height: 1.35; }
+.icon-link { width: 48px; height: 48px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 4px; color: var(--fg); background: var(--panel); }
+.icon-link:hover { border-color: var(--amber); color: var(--amber); }
+.icon-link svg { width: 20px; height: 20px; }
+.side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.photo { position: relative; margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.photo .panel-head .rec { display: inline-flex; align-items: center; gap: 6px; color: var(--high); }
+.photo .panel-head .rec::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--high); animation: caretblink 1.4s step-end infinite; }
+.photo-frame { position: relative; aspect-ratio: 4 / 3.4; max-width: 100%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, rgba(255,122,26,0.18), transparent 65%), var(--ink); }
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-frame .initials { font-family: var(--display); font-size: 72px; font-weight: 700; color: var(--amber); letter-spacing: 0.04em; }
+.photo-frame::before, .photo-frame::after { content: ""; position: absolute; width: 28px; height: 28px; border: 2px solid var(--amber); pointer-events: none; z-index: 1; }
+.photo-frame::before { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
+.photo-frame::after { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+.photo-cap { padding: 10px 16px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.photo-cap b { color: var(--ok); font-weight: 500; }
+.side .feed-body { height: 230px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.filters button { font-family: var(--mono); font-size: 13px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); cursor: pointer; }
+.filters button:hover { color: var(--fg); border-color: var(--amber); }
+.filters button[aria-pressed="true"] { background: var(--amber); border-color: var(--amber); color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) { .stat b { font-size: 24px; } }
+
 /* Flux d'événements */
 .feed { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; min-width: 0; }
 .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--panel-2); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); }
@@ -194,6 +228,9 @@ section { padding-block: 64px; border-top: 1px solid var(--line); }
 .tag { font-family: var(--mono); font-size: 11.5px; padding: 3px 8px; border-radius: 3px; border: 1px solid rgba(255,122,26,0.45); color: var(--amber); }
 .tag.learn { border-color: rgba(108,182,255,0.45); color: var(--signal); }
 
+.repo { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 10px 14px; border: 1px solid var(--amber); border-radius: 4px; font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--amber); text-decoration: none; }
+.repo:hover { background: var(--amber-soft); }
+.repo svg { width: 16px; height: 16px; }
 /* Laboratoire */
 .lab { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; align-items: start; }
 .lab-text { display: flex; flex-direction: column; gap: 14px; color: var(--muted); }
@@ -325,19 +362,29 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
 <main id="top">
   <div class="wrap hero">
     <div>
+      <div class="hiring"><i></i>À la recherche d'une alternance</div>
       <div class="eyebrow">Ingénierie Cloud · DevOps · Sécurité</div>
       <h1 class="name">Edna Sephora <span>OULÉ</span></h1>
+      <p class="iam">$ echo $ROLE</p>
+      <p class="typed" aria-label="Ingénieure Cloud, DevOps et DevSecOps"><b id="typed">Ingénieure Cloud</b><i class="caret" aria-hidden="true"></i></p>
       <p class="role">Je conçois, j'automatise et je sécurise des infrastructures cloud et des chaînes de déploiement. La sécurité, <em>dès la première étape</em>.</p>
       <p class="lead">Issue de la supervision et de la cybersécurité, je construis aujourd'hui des pipelines CI/CD et des clusters Kubernetes dans mon propre laboratoire, en intégrant la sécurité à chaque étape.</p>
       <div class="chips">
-        <span class="chip hot">recherche : <b>alternance Cloud, DevOps ou DevSecOps · février 2027</b></span>
-        <span class="chip">formation : <b>MSc Cloud, Epitech · 2027–2028</b></span>
+        <span class="chip hot">recherche : <b>alternance Cloud, DevOps ou DevSecOps · disponible immédiatement</b></span>
+        <span class="chip">formation : <b>MSc Cloud, Epitech · février 2027 – septembre 2028</b></span>
         <span class="chip">rythme : <b>2 semaines école / 6 semaines entreprise</b></span>
         <span class="chip">zone : <b>Île-de-France</b></span>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>2+</b><span>années d'expérience</span></div>
+        <div class="stat"><b>7</b><span>projets réalisés</span></div>
+        <div class="stat"><b>Bac+5</b><span>cybersécurité et cloud</span></div>
       </div>
       <div class="ctas">
         <a class="btn btn-main" href="#contact">Prendre contact</a>
         <a class="btn btn-ghost" href="#console">Interroger la console</a>
+        <a class="icon-link" href="https://www.linkedin.com/in/oule-sephora" target="_blank" rel="noopener" aria-label="Profil LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"></path></svg></a>
+        <a class="icon-link" href="https://github.com/ednoush" target="_blank" rel="noopener" aria-label="Profil GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5a3 3 0 0 0-.8-2.3c2.7-.3 5.5-1.3 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.5 2.5 5.5 2.8 5.5 2.8a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 4 9.2c0 4.7 2.8 5.7 5.5 6a3 3 0 0 0-.8 2.3V21"></path></svg></a>
       </div>
     </div>
 
@@ -351,7 +398,7 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
         <div class="ev"><time>09:14:55</time><span class="lvl l3">L3</span><span>Image poussée sur Harbor, analyse Trivy lancée</span></div>
         <div class="ev"><time>09:20:18</time><span class="lvl l3">L3</span><span>Déploiement Kubernetes : 3/3 pods prêts</span></div>
       </div>
-      <div class="feed-foot"><span>étapes du pipeline <b>8</b></span><span>projets <b>8</b></span><span>événements <b id="count">6</b></span></div>
+      <div class="feed-foot"><span>étapes du pipeline <b>8</b></span><span>projets <b>7</b></span><span>événements <b id="count">6</b></span></div>
     </aside>
   </div>
 
@@ -427,32 +474,76 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
   <section id="dossiers">
     <div class="wrap">
       <div class="sec-head">
-        <div><div class="eyebrow">Projets</div><h2>Dossiers techniques</h2></div>
-        <p>Des projets menés sur une infrastructure réelle, documentés et vérifiés sur des systèmes en fonctionnement.</p>
+        <div><div class="eyebrow">Expériences et projets</div><h2>Dossiers techniques</h2></div>
+        <p>Mes expériences en entreprise, mes projets personnels et mes projets universitaires, séparés pour une lecture claire.</p>
       </div>
 
-      <div class="group">
-        <p class="group-label">Réalisations techniques</p>
+      <div class="filters" role="group" aria-label="Filtrer les projets">
+        <button type="button" data-filter="all" aria-pressed="true">Tous</button>
+        <button type="button" data-filter="pro" aria-pressed="false">Expériences professionnelles</button>
+        <button type="button" data-filter="perso" aria-pressed="false">Projets personnels</button>
+        <button type="button" data-filter="ecole" aria-pressed="false">Projets universitaires</button>
+      </div>
+
+      <div class="group" data-cat="pro">
+        <p class="group-label">Expériences professionnelles</p>
+        <div class="cases">
+          <article class="case" data-state="production">
+            <span class="case-id">DOSSIER #001 · LOGIPROX · octobre 2024 à mars 2026</span>
+            <h3>Ingénieure Cybersécurité</h3>
+            <p>À partir des besoins exprimés par l'entreprise, j'ai choisi et déployé les outils de supervision, de détection, de sauvegarde et d'accès à distance.</p>
+            <ul class="log">
+              <li><span><b>Centreon</b> pour la disponibilité et la performance des équipements.</span></li>
+              <li><span><b>Wazuh</b> pour la détection d'incidents de sécurité et la conformité.</span></li>
+              <li><span><b>Bacula</b> pour la gestion centralisée des sauvegardes sur une architecture multi-stockages (NAS et serveurs dédiés).</span></li>
+              <li><span><b>Apache Guacamole</b> comme bastion d'administration à distance.</span></li>
+              <li><span>Accès à l'ensemble de ces services par un reverse proxy <b>Nginx</b> avec WAF <b>ModSecurity</b> et certificat SSL.</span></li>
+              <li><span>Déploiement et administration de l'<b>Active Directory</b> (LDAP/LDAPS) : utilisateurs, <b>MFA</b>, politiques de mots de passe.</span></li>
+              <li><span>Protection des serveurs contre les tentatives d'intrusion avec <b>Fail2ban</b> et filtrage réseau avec <b>Firewalld</b>.</span></li>
+              <li><span>Schémas d'architecture réalisés avec <b>Draw.io</b>.</span></li>
+              <li><span>Sensibilisation des équipes aux bonnes pratiques de cybersécurité.</span></li>
+              <li><span>Infrastructure hébergée sur le cloud public <b>OVHcloud</b>.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Centreon</span><span class="tag">Wazuh</span><span class="tag">Bacula</span><span class="tag">Guacamole</span><span class="tag">Nginx</span><span class="tag">ModSecurity</span><span class="tag">Active Directory</span><span class="tag">MFA</span><span class="tag">Fail2ban</span><span class="tag">Firewalld</span><span class="tag">Draw.io</span><span class="tag">SSL/TLS</span><span class="tag">OVHcloud</span></div>
+          </article>
+          <article class="case" data-state="production">
+            <span class="case-id">DOSSIER #002 · Orange Côte d'Ivoire · mai 2022 à juillet 2023</span>
+            <h3>Consultante, supervision des services réseaux</h3>
+            <p>Supervision des services d'un opérateur télécom national, du réseau mobile à la fibre.</p>
+            <ul class="log">
+              <li><span>Supervision en temps réel des services d'Orange : <b>USSD</b>, <b>FTTH</b>, <b>2G</b>, <b>3G</b> et <b>4G</b>.</span></li>
+              <li><span>Détection, enregistrement, analyse et qualification des incidents de services.</span></li>
+              <li><span>Tests de bon fonctionnement des services.</span></li>
+            </ul>
+            <div class="tags"><span class="tag">Kapptivate</span><span class="tag">Centreon</span><span class="tag">Kibana</span><span class="tag">Daset</span><span class="tag">Oceane Ticket</span></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="group" data-cat="perso">
+        <p class="group-label">Projets personnels</p>
         <div class="cases">
           <article class="case" data-state="labo">
-            <span class="case-id">DOSSIER #001 · Déploiement et intégration continue</span>
+            <span class="case-id">DOSSIER #003 · Projet personnel · déploiement et intégration continue</span>
             <h3>Pipeline CI/CD du projet OULE</h3>
             <p>Application composée d'un frontend React et d'un backend Spring Boot, réunis dans un seul dépôt. J'ai pris en charge toute la partie construction et livraison.</p>
             <ul class="log">
               <li><span>Pipelines <b>Jenkins</b> déclenchés depuis le dépôt <b>Gitea</b>.</span></li>
               <li><span>Couverture des tests unitaires avec <b>JaCoCo</b> et robustesse évaluée par tests de mutation avec <b>PIT</b>.</span></li>
               <li><span>Intégration de <b>SonarQube</b>, déployé avec Docker aux côtés de Jenkins.</span></li>
+              <li><span>Quality gates bloquants : le pipeline s'arrête automatiquement dès qu'une vulnérabilité de score <b>CVSS ≥ 7</b> est détectée.</span></li>
               <li><span>Analyse des dépendances avec <b>OWASP Dependency-Check</b>, afin de corriger les failles avant la construction de l'image.</span></li>
               <li><span>Publication des images sur <b>Harbor</b>, avec analyse des vulnérabilités par <b>Trivy</b>.</span></li>
               <li><span>Déploiement sur Kubernetes avec un <b>Ingress Controller</b> pour gérer le trafic interne et rendre l'application accessible.</span></li>
-              <li><span>Base de données déployée avec un <b>StatefulSet</b>, pour conserver ses données et son identité réseau.</span></li>
+              <li><span>Base de données <b>MySQL</b> déployée avec un <b>StatefulSet</b>, pour conserver ses données et son identité réseau.</span></li>
               <li><span>Choix d'architecture justifié : outils de CI séparés du cluster applicatif.</span></li>
             </ul>
-            <div class="tags"><span class="tag">Jenkins</span><span class="tag">Gitea</span><span class="tag">JaCoCo</span><span class="tag">PIT</span><span class="tag">SonarQube</span><span class="tag">OWASP Dependency-Check</span><span class="tag">Docker</span><span class="tag">Harbor</span><span class="tag">Trivy</span><span class="tag">Ingress</span><span class="tag">StatefulSet</span></div>
+            <div class="tags"><span class="tag">Jenkins</span><span class="tag">Gitea</span><span class="tag">JaCoCo</span><span class="tag">PIT</span><span class="tag">SonarQube</span><span class="tag">OWASP Dependency-Check</span><span class="tag">Docker</span><span class="tag">Harbor</span><span class="tag">Trivy</span><span class="tag">Ingress</span><span class="tag">StatefulSet</span><span class="tag">MySQL</span><span class="tag">Helm</span><span class="tag">Ansible</span><span class="tag">HAProxy</span></div>
+            <a class="repo" href="https://gitio.devsecops-local.click:4435/edna/projet-OULE" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="9" r="2"></circle><path d="M6 7v10M18 11c0 4-6 3-11 7"></path></svg>Voir le dépôt sur Gitea</a>
           </article>
           <article class="case" data-state="CKAD">
-            <span class="case-id">DOSSIER #002 · Projet personnel</span>
-            <h3>k8s-portfolio-app</h3>
+            <span class="case-id">DOSSIER #004 · Projet personnel</span>
+            <h3>k8s-flask-redis</h3>
             <p>Une API Flask connectée à Redis, conteneurisée puis déployée sur Kubernetes en appliquant les bonnes pratiques de sécurité.</p>
             <ul class="log">
               <li><span>Configuration externalisée via <b>ConfigMap</b> et mot de passe Redis injecté par un <b>Secret</b>.</span></li>
@@ -461,23 +552,10 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
               <li><span>Requêtes et limites de ressources définies ; environnements séparés par <b>namespaces</b>.</span></li>
             </ul>
             <div class="tags"><span class="tag">Python/Flask</span><span class="tag">Redis</span><span class="tag">Harbor</span><span class="tag">Kubernetes</span><span class="tag">RBAC</span></div>
-          </article>
-          <article class="case" data-state="production">
-            <span class="case-id">DOSSIER #003 · LOGIPROX · expérience professionnelle</span>
-            <h3>Supervision, sauvegarde et accès sécurisés</h3>
-            <p>À partir des besoins exprimés par l'entreprise, j'ai choisi et déployé les outils de supervision, de détection, de sauvegarde et d'accès à distance.</p>
-            <ul class="log">
-              <li><span><b>Centreon</b> pour la disponibilité et la performance des équipements.</span></li>
-              <li><span><b>Wazuh</b> pour la détection d'incidents de sécurité et la conformité.</span></li>
-              <li><span><b>Bacula</b> pour la gestion centralisée des sauvegardes sur une architecture multi-stockages (NAS et serveurs dédiés).</span></li>
-              <li><span><b>Apache Guacamole</b> comme bastion d'administration à distance.</span></li>
-              <li><span>Accès à l'ensemble de ces services par un reverse proxy <b>Nginx</b> avec certificat SSL.</span></li>
-              <li><span>Infrastructure hébergée sur le cloud public <b>OVHcloud</b>.</span></li>
-            </ul>
-            <div class="tags"><span class="tag">Centreon</span><span class="tag">Wazuh</span><span class="tag">Bacula</span><span class="tag">Guacamole</span><span class="tag">Nginx</span><span class="tag">SSL/TLS</span><span class="tag">OVHcloud</span></div>
+            <a class="repo" href="https://github.com/ednoush/k8s-flask-redis" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="9" r="2"></circle><path d="M6 7v10M18 11c0 4-6 3-11 7"></path></svg>Voir le code sur GitHub</a>
           </article>
           <article class="case" data-state="labo">
-            <span class="case-id">DOSSIER #004 · Projet personnel · infrastructure</span>
+            <span class="case-id">DOSSIER #005 · Projet personnel · infrastructure</span>
             <h3>Cluster Kubernetes avec kubeadm</h3>
             <p>Construction et dépannage d'un cluster multi-nœuds sur des machines virtuelles RHEL/Rocky Linux 8.</p>
             <ul class="log">
@@ -489,11 +567,11 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
         </div>
       </div>
 
-      <div class="group">
+      <div class="group" data-cat="ecole">
         <p class="group-label">Projets universitaires · EFREI Paris</p>
         <div class="cases">
           <article class="case" data-state="EFREI">
-            <span class="case-id">DOSSIER #005 · Projet annuel · septembre 2024 à juin 2025</span>
+            <span class="case-id">DOSSIER #006 · Projet annuel · septembre 2024 à juin 2025</span>
             <h3>Bastion d'administration avec Teleport</h3>
             <p>Projet que j'ai proposé dans le cadre de mon alternance : un point d'entrée unique et contrôlé pour administrer les serveurs à distance.</p>
             <ul class="log">
@@ -503,7 +581,7 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
             <div class="tags"><span class="tag">Teleport</span><span class="tag">Bastion</span><span class="tag">SSH</span></div>
           </article>
           <article class="case" data-state="EFREI">
-            <span class="case-id">DOSSIER #006 · Projet annuel · septembre 2023 à juin 2024</span>
+            <span class="case-id">DOSSIER #007 · Projet annuel · septembre 2023 à juin 2024</span>
             <h3>Infrastructure cloud multi-tiers</h3>
             <p>Conception d'une plateforme de commerce en ligne pour une entreprise fictive, puis sécurisation complète de la plateforme web.</p>
             <ul class="log">
@@ -515,7 +593,7 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
             <div class="tags"><span class="tag">Cloud</span><span class="tag">SSL/TLS</span><span class="tag">IAM</span><span class="tag">IDS</span></div>
           </article>
           <article class="case" data-state="EFREI">
-            <span class="case-id">DOSSIER #007 · Septembre à novembre 2023</span>
+            <span class="case-id">DOSSIER #008 · Septembre à novembre 2023</span>
             <h3>Gestion de parc informatique</h3>
             <p>Déploiement d'un serveur Windows 2019, d'un serveur GLPI et de deux postes clients pour inventorier automatiquement le parc.</p>
             <ul class="log">
@@ -525,7 +603,7 @@ footer { padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-conte
             <div class="tags"><span class="tag">GLPI</span><span class="tag">Active Directory</span><span class="tag">GPO</span><span class="tag">Vagrant</span><span class="tag">VMware</span></div>
           </article>
           <article class="case" data-state="EFREI">
-            <span class="case-id">DOSSIER #008 · Septembre 2023</span>
+            <span class="case-id">DOSSIER #009 · Septembre 2023</span>
             <h3>Infrastructure sécurisée</h3>
             <p>Mise en place d'une infrastructure disponible, accessible à distance de façon sécurisée et supervisée.</p>
             <ul class="log">
@@ -592,7 +670,7 @@ hp-srv              <span class="c"># proxy HAProxy</span>
           <article class="rule">
             <div class="rule-id"><b>active</b><span>rule 1003</span></div>
             <h3>Sécurité</h3>
-            <ul><li><strong>Wazuh</strong> (SIEM / XDR)</li><li><strong>Apache Guacamole</strong> (bastion)</li><li><strong>Active Directory</strong></li><li><strong>RGPD</strong> et conformité</li></ul>
+            <ul><li><strong>Wazuh</strong> (SIEM / XDR)</li><li><strong>Apache Guacamole</strong> (bastion)</li><li><strong>Active Directory</strong> (LDAPS, MFA)</li><li><strong>ModSecurity</strong> (WAF), <strong>Fail2ban</strong></li><li><strong>RGPD</strong> et conformité</li></ul>
           </article>
         </div>
       </div>
@@ -608,7 +686,7 @@ hp-srv              <span class="c"># proxy HAProxy</span>
           <article class="rule learning">
             <div class="rule-id"><b>en test</b><span>rule 2002</span></div>
             <h3>CI/CD et automatisation</h3>
-            <ul><li><strong>Jenkins</strong>, Gitea, GitLab CE</li><li><strong>Harbor</strong> (registre d'images)</li><li><strong>Git</strong></li><li><strong>Ansible</strong></li></ul>
+            <ul><li><strong>Jenkins</strong>, Gitea, GitLab CE</li><li><strong>Harbor</strong> (registre d'images)</li><li><strong>Git</strong></li><li><strong>Ansible</strong>, <strong>Helm</strong></li></ul>
           </article>
           <article class="rule learning">
             <div class="rule-id"><b>en test</b><span>rule 2003</span></div>
@@ -633,12 +711,12 @@ hp-srv              <span class="c"># proxy HAProxy</span>
       </div>
       <div class="timeline">
         <article class="event next">
-          <div class="event-meta"><span class="kind edu">formation · à venir</span><span class="when">2027 – 2028</span></div>
-          <div class="event-body"><h3>MSc Cloud, Epitech</h3><p>Formation en présentiel, en alternance à partir de février 2027.</p></div>
+          <div class="event-meta"><span class="kind edu">formation · à venir</span><span class="when">février 2027 – septembre 2028</span></div>
+          <div class="event-body"><h3>MSc Cloud, Epitech</h3><p>Formation en présentiel et en alternance, avec une rentrée décalée : une première période de février à août 2027, puis une année complète de septembre 2027 à septembre 2028.</p></div>
         </article>
         <article class="event">
           <div class="event-meta"><span class="kind xp">expérience</span><span class="when">2024 – 2026</span></div>
-          <div class="event-body"><h3>Infrastructure et sécurité, LOGIPROX</h3><p>Choix des technologies et mise en place de Centreon, Wazuh, Bacula et Apache Guacamole, accessibles par un reverse proxy Nginx avec certificat SSL.</p></div>
+          <div class="event-body"><h3>Ingénieure Cybersécurité, LOGIPROX</h3><p>Choix des technologies et mise en place de Centreon, Wazuh, Bacula et Apache Guacamole, accessibles par un reverse proxy Nginx avec WAF ModSecurity et certificat SSL. Administration de l'Active Directory avec MFA, protection des serveurs avec Fail2ban et sensibilisation des équipes à la cybersécurité.</p></div>
         </article>
         <article class="event">
           <div class="event-meta"><span class="kind edu">formation</span><span class="when">2023 – 2025</span></div>
@@ -646,7 +724,7 @@ hp-srv              <span class="c"># proxy HAProxy</span>
         </article>
         <article class="event">
           <div class="event-meta"><span class="kind xp">expérience</span><span class="when">2022 – 2023</span></div>
-          <div class="event-body"><h3>Consultante en supervision des services réseaux, Orange Côte d'Ivoire</h3><p>Supervision en temps réel des services avec Centreon, Kibana, Kapptivate et Daset ; détection, analyse et qualification des incidents ; tests de bon fonctionnement.</p></div>
+          <div class="event-body"><h3>Consultante, supervision des services réseaux, Orange Côte d'Ivoire</h3><p>Supervision en temps réel des services avec Centreon, Kibana, Kapptivate, Daset et Oceane Ticket ; détection, analyse et qualification des incidents ; tests de bon fonctionnement.</p></div>
         </article>
         <article class="event">
           <div class="event-meta"><span class="kind edu">formation</span><span class="when">2017 – 2022</span></div>
@@ -687,7 +765,7 @@ hp-srv              <span class="c"># proxy HAProxy</span>
         <div>
           <div class="eyebrow">Contact</div>
           <h2>Ticket ouvert : alternance Cloud et DevOps</h2>
-          <p>Je recherche une entreprise d'accueil pour une alternance en ingénierie cloud, DevOps ou DevSecOps à partir de février 2027. Assignez-moi le ticket.</p>
+          <p>Je recherche une entreprise d'accueil pour une alternance en ingénierie cloud, DevOps ou DevSecOps. Je suis disponible immédiatement. Assignez-moi le ticket.</p>
         </div>
         <div class="contact-lines">
           <div class="cline"><div><small>Localisation</small><span>Île-de-France</span></div></div>
@@ -738,6 +816,32 @@ hp-srv              <span class="c"># proxy HAProxy</span>
     count++; countEl.textContent = count;
   }
   if (!reduce) setInterval(push, 2600);
+
+  /* Titre qui s'écrit lettre par lettre */
+  var roles = ['Ingénieure Cloud', 'Ingénieure DevOps', 'Ingénieure DevSecOps'];
+  var typedEl = document.getElementById('typed');
+  if (!reduce && typedEl) {
+    var ri = 0, ci = roles[0].length, del = true;
+    (function tick() {
+      if (del) { ci--; if (ci <= 0) { del = false; ri = (ri + 1) % roles.length; ci = 0; } }
+      else { ci++; }
+      typedEl.textContent = roles[ri].slice(0, ci);
+      var wait = del ? 45 : 95;
+      if (!del && ci >= roles[ri].length) { del = true; wait = 1800; }
+      setTimeout(tick, wait);
+    })();
+  }
+
+  /* Filtres des projets */
+  var fBtns = document.querySelectorAll('.filters button');
+  var fGroups = document.querySelectorAll('#dossiers .group');
+  fBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-filter');
+      fBtns.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      fGroups.forEach(function (g) { g.hidden = !(f === 'all' || g.getAttribute('data-cat') === f); });
+    });
+  });
 
   /* Pipeline CI/CD */
   var stages = Array.prototype.slice.call(document.querySelectorAll('#stages .stage'));
@@ -855,12 +959,12 @@ hp-srv              <span class="c"># proxy HAProxy</span>
   var input = document.getElementById('cmd');
   var cmds = {
     help: [['h', 'Commandes disponibles :'], ['o', '  whoami        qui je suis'], ['o', '  pipeline      ma chaîne CI/CD'], ['o', '  projets       mes dossiers techniques'], ['o', '  labo          mon infrastructure d’entraînement'], ['o', '  competences   ce que je maîtrise'], ['o', '  parcours      expérience et formation'], ['o', '  contact       me joindre'], ['o', '  clear         vider l’écran']],
-    whoami: [['h', 'Edna Sephora OULÉ'], ['o', 'Profil cybersécurité, en formation ingénierie Cloud, DevOps et sécurité.'], ['o', 'Recherche une alternance Cloud, DevOps ou DevSecOps à partir de février 2027 (MSc Cloud, Epitech).']],
+    whoami: [['h', 'Edna Sephora OULÉ'], ['o', 'Je viens de la cybersécurité et je me forme aujourd\u2019hui à l\u2019ingénierie cloud.'], ['o', 'J\u2019aime concevoir, automatiser et sécuriser des infrastructures, et comprendre un système en profondeur avant de l\u2019automatiser.'], ['o', 'Je cherche une alternance en Cloud, DevOps ou DevSecOps pour mon MSc Cloud à Epitech, et je suis disponible dès maintenant.']],
     pipeline: [['h', 'Chaîne CI/CD du laboratoire :'], ['o', '  Gitea → Jenkins → JaCoCo + PIT → SonarQube'], ['o', '  → OWASP Dependency-Check → Docker → Harbor + Trivy → Kubernetes']],
-    projets: [['h', 'Dossiers techniques :'], ['o', '  #001  Pipeline CI/CD du projet OULE'], ['o', '  #002  k8s-portfolio-app (Flask, Redis, RBAC)'], ['o', '  #003  Supervision, sauvegarde et accès sécurisés (LOGIPROX)'], ['o', '  #004  Cluster Kubernetes avec kubeadm'], ['h', 'Projets universitaires (EFREI Paris) :'], ['o', '  #005  Bastion Teleport   #006  Cloud multi-tiers'], ['o', '  #007  Parc informatique GLPI   #008  Infrastructure sécurisée']],
+    projets: [['h', 'Expériences professionnelles :'], ['o', '  #001  Ingénieure Cybersécurité (LOGIPROX)'], ['o', '  #002  Consultante, supervision des services réseaux (Orange CI)'], ['h', 'Projets personnels :'], ['o', '  #003  Pipeline CI/CD du projet OULE'], ['o', '        dépôt : gitio.devsecops-local.click:4435/edna/projet-OULE'], ['o', '  #004  k8s-flask-redis (Flask, Redis, RBAC)'], ['o', '        dépôt : github.com/ednoush/k8s-flask-redis'], ['o', '  #005  Cluster Kubernetes avec kubeadm'], ['h', 'Projets universitaires (EFREI Paris) :'], ['o', '  #006  Bastion Teleport   #007  Cloud multi-tiers'], ['o', '  #008  Parc informatique GLPI   #009  Infrastructure sécurisée']],
     labo: [['h', 'srv-devops : hyperviseur KVM'], ['o', '  control-plane-srv : plan de contrôle'], ['o', '  worker-srv        : nœud de travail'], ['o', '  jenkins-srv       : Jenkins, Harbor, SonarQube, Dependency-Check'], ['o', '  hp-srv            : HAProxy, accès depuis l\u2019extérieur']],
     competences: [['h', 'Acquises :'], ['o', '  Linux, Bash, KVM, Nginx, Bacula, Centreon, Kibana,'], ['o', '  Wazuh, Guacamole, Active Directory, RGPD'], ['h', 'En apprentissage :'], ['o', '  Docker, Kubernetes, Jenkins, Gitea, GitLab CE, Harbor,'], ['o', '  Ansible, SonarQube, Dependency-Check, Trivy, Python']],
-    parcours: [['h', 'Chronologie :'], ['o', '  2027-2028  MSc Cloud, Epitech (alternance)'], ['o', '  2024-2026  Infrastructure et sécurité, LOGIPROX'], ['o', '  2023-2025  Mastère Cybersécurité et Cloud, EFREI Paris'], ['o', '  2022-2023  Supervision des services réseaux, Orange CI'], ['o', '  2017-2022  Master Télécommunications, ISTC Polytechnique'], ['o', '  +          The Ultimate DevOps Bootcamp (Udemy)']],
+    parcours: [['h', 'Chronologie :'], ['o', '  02/2027-09/2028  MSc Cloud, Epitech (alternance, rentrée décalée en février)'], ['o', '  2024-2026  Ingénieure Cybersécurité, LOGIPROX'], ['o', '  2023-2025  Mastère Cybersécurité et Cloud, EFREI Paris'], ['o', '  2022-2023  Consultante, supervision des services réseaux, Orange CI'], ['o', '  2017-2022  Master Télécommunications, ISTC Polytechnique'], ['o', '  +          The Ultimate DevOps Bootcamp (Udemy)']],
     contact: [['h', 'Ouvrir un ticket :'], ['o', '  localisation   Île-de-France'], ['o', '  disponibilité  immédiate'], ['o', '  linkedin       linkedin.com/in/oule-sephora'], ['o', '  e-mail         ' + document.getElementById('mail').textContent]]
   };
   cmds['compétences'] = cmds.competences;
